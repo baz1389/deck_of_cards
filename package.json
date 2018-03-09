@@ -17,6 +17,7 @@
   },
   "homepage": "https://github.com/baz1389/deck_of_cards#readme",
   "dependencies": {
-    "express": "^4.16.2"
+    "express": "^4.16.2",
+    "nodemon": "^1.17.1"
   }
 }
