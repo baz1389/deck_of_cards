@@ -1,30 +1,29 @@
+#!/usr/bin/env node
 'use strict';
 
 const baseURL = 'https://deckofcardsapi.com/api/deck/'
 const chalk = require('chalk');
+const request = require('request');
+const program = require('commander');
+const pokerEvaluator = require('poker-evaluator');
 const log = console.log;
 
-var request = require('request');
-var pokerEvaluator = require('poker-evaluator');
-
-function findBestHand(cardHand) {
+let findBestPokerHand = function(cardHand) {
     return pokerEvaluator.evalHand(cardHand);
 }
 
-function drawCards() {
-    var numberOfCards = process.argv[2];
-    var deck_id = (process.argv[3] === undefined ? 'new' : process.argv[3]);
-    var url = baseURL + deck_id + '/draw/?count=' + numberOfCards.toString();
+let drawCards= function(numberOfCards, deck_id) {
+    let deck = deck_id === undefined ? 'new' : deck_id;
+    let url = baseURL + deck + '/draw/?count=' + numberOfCards;
     log(chalk.yellow('You chose a ' + numberOfCards + ' card hand.'));
 
     parseRequest(url);
 }
 
-//TODO name this function better
-function parseRequest(url) {
+let parseRequest = function(url) {
     request(url, function (error, response, body) {
-        var parsedBody;
-        var handofCards = [];
+        let parsedBody;
+        let handofCards = [];
 
         if (!error && response.statusCode === 200) {
 
@@ -40,7 +39,7 @@ function parseRequest(url) {
                 log(card['value'] + ' of ' + card['suit']);
 
             });
-            log('Your best hand is: ' + chalk.red(findBestHand(handofCards)['handName'].toUpperCase()));
+            log('Your best hand is: ' + chalk.red(findBestPokerHand(handofCards)['handName'].toUpperCase()));
             log(chalk.blue('There are ' + parsedBody['remaining']
                 + ' cards remaining in deck ' + parsedBody['deck_id']));
 
@@ -50,4 +49,10 @@ function parseRequest(url) {
     });
 }
 
-drawCards();
+program
+    .version('0.1.0')
+    .description('Deck of Cards App')
+    .option('-c, --cards [value]', 'Specify the number of cards to be drawn', drawCards)
+    .parse(process.argv);
+
+module.exports = findBestPokerHand;
