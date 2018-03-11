@@ -12,7 +12,7 @@ let findBestPokerHand = function(cardHand) {
     return pokerEvaluator.evalHand(cardHand);
 }
 
-let drawCards= function(numberOfCards, deck_id) {
+let drawCards = function(numberOfCards, deck_id) {
     let deck = deck_id === undefined ? 'new' : deck_id;
     let url = baseURL + deck + '/draw/?count=' + numberOfCards;
     log(chalk.yellow('You chose a ' + numberOfCards + ' card hand.'));
@@ -21,9 +21,9 @@ let drawCards= function(numberOfCards, deck_id) {
 }
 
 let parseRequest = function(url) {
-    request(url, function (error, response, body) {
+    request(url, function(error, response, body) {
         let parsedBody;
-        let handofCards = [];
+        let pokerHand = [];
 
         if (!error && response.statusCode === 200) {
 
@@ -31,28 +31,44 @@ let parseRequest = function(url) {
             log(chalk.green('===== YOUR POKER HAND ====='));
 
             parsedBody['cards'].forEach(function(card) {
-                if(card['value'] === '10') {
+                if (card['value'] === '10') {
                     //Fixes API and poker-eval incompatability
                     card['code'] = card['code'].replace(0, 'T')
                 }
-                handofCards.push(card['code']);
+                pokerHand.push(card['code']);
                 log(card['value'] + ' of ' + card['suit']);
 
             });
-            log('Your best hand is: ' + chalk.red(findBestPokerHand(handofCards)['handName'].toUpperCase()));
-            log(chalk.blue('There are ' + parsedBody['remaining']
-                + ' cards remaining in deck ' + parsedBody['deck_id']));
+
+            log('Your best hand is: ' + chalk.red(findBestPokerHand(pokerHand)['handName'].toUpperCase()));
+            log(chalk.blue('There are ' + parsedBody['remaining'] +
+                ' cards remaining in deck ' + parsedBody['deck_id']));
 
         } else {
-            log(chalk.red('Error:') +response.statusCode);
+            log(chalk.red('Error: ') + response.statusCode);
         }
     });
 }
 
+//Commander CLI logic
+
 program
     .version('0.1.0')
     .description('Deck of Cards App')
-    .option('-c, --cards [value]', 'Specify the number of cards to be drawn', drawCards)
-    .parse(process.argv);
+    .arguments('<numberOfCards> [deck_id]')
+    .action(function (numberOfCards, deck_id) {
+        drawCards(numberOfCards, deck_id);
+    });
+
+program.on('--help', function(){
+    log('');
+    log('  Examples:');
+    log('');
+    log('    $ node app.js 5');
+    log('    $ node app.js 5 a1b2c3');
+    log('');
+});
+
+program.parse(process.argv);
 
 module.exports = findBestPokerHand;
