@@ -41,9 +41,9 @@
     KING of SPADES
     ACE of DIAMONDS
     Your best hand is: HIGH CARD
-    There are 47 cards remaining in deck **rhxnpwupqyje**
+    There are 47 cards remaining in deck rhxnpwupqyje
     ```
-* `$ node poker.js 5 **rhxnpwupqyje**`: Deals 5 cards from deck rhxnpwupqyje
+* `$ node poker.js 5 rhxnpwupqyje`: Deals 5 cards from deck rhxnpwupqyje
     * Note, deck_id is an optional argument. If you do not specify a deck_id, a new deck will be created
         * Previously created decks can always be reused so long as there are cards left in the deck
         
@@ -53,4 +53,4 @@
  * Once a deck has been created it is considered shuffled
     * 'Draw a Card' API call: replace <<deck_id>> with 'new' to create a shuffled deck and draw cards from that deck in the same request
         * Cards will not be put back into the deck once they have been played
-    * 'Reshuffle a Deck' API call: brings the card count back to 52
+    * 'Reshuffle a Deck' API call: brings the card count of a deck back to 52 so was not implemented
