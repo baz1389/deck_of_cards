@@ -50,7 +50,8 @@
 * `npm test`: Runs unit tests
      
 ## Assumptions
- * Once a deck has been created it is considered shuffled
-    * 'Draw a Card' API call: replace <<deck_id>> with 'new' to create a shuffled deck and draw cards from that deck in the same request
+* Users will always have to draw a hand of 3, 5, or 7 cards per the poker-evaluator module.
+* Once a deck has been created it is considered shuffled
+   * 'Draw a Card' API call: replace <<deck_id>> with 'new' to create a shuffled deck and draw cards from that deck in the same request
         * Cards will not be put back into the deck once they have been played
-    * 'Reshuffle a Deck' API call: brings the card count of a deck back to 52 so was not implemented
+   * 'Reshuffle a Deck' API call: brings the card count of a deck back to 52 so **was not implemented**
