@@ -1,4 +1,4 @@
-const findBestPokerHand = require('../app.js');
+const findBestPokerHand = require('../poker.js');
 const chai = require('chai');
 const assert = chai.assert;
 
