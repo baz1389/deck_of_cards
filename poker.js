@@ -1,4 +1,3 @@
-#!/usr/bin/env node
 'use strict';
 
 const baseURL = 'https://deckofcardsapi.com/api/deck/'
@@ -13,14 +12,14 @@ let findBestPokerHand = function(cardHand) {
 }
 
 let drawCards = function(numberOfCards, deck_id) {
-    let action = 'deal';
     let deck = deck_id === undefined ? 'new' : deck_id;
     let url = baseURL + deck + '/draw/?count=' + numberOfCards;
     log(chalk.yellow('You were dealt a ' + numberOfCards + ' card hand.'));
-    parseRequest(url, action);
+
+    parseRequest(url);
 }
 
-let parseRequest = function(url, action) {
+let parseRequest = function(url) {
     request(url, function(error, response, body) {
         let parsedBody;
         let pokerHand = [];
